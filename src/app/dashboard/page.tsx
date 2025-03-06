@@ -9,6 +9,7 @@ export default function DashboardPage() {
       <Button onClick={() => logout()} danger={true} type="primary">
         Logout
       </Button>
+      <Button type="primary">Primary Button</Button>
     </div>
   );
 }

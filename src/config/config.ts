@@ -1,1 +1,1 @@
-export const guestRoutes = ["/", "/login", "/auth", "/register"];
+export const guestRoutes = ["/", "/login", "/auth", "/register", "/data"];
