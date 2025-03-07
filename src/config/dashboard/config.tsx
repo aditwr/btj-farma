@@ -41,24 +41,24 @@ export const profileMenu: MenuProps["items"] = [
     type: "divider",
   },
   {
-    key: "/profile",
+    key: "profile",
     label: "Profile",
     extra: "⌘P",
   },
   {
-    key: "/billing",
+    key: "billing",
     label: "Billing",
     extra: "⌘B",
   },
   {
-    key: "/setting",
+    key: "setting",
     label: "Settings",
     icon: <SettingOutlined />,
     extra: "⌘S",
   },
   // add logout option
   {
-    key: "/logout",
+    key: "logout",
     label: "Logout",
     icon: <LogoutOutlined />,
     style: { background: "#fb2c36", color: "white" },

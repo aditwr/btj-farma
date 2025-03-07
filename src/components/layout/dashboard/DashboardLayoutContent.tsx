@@ -18,7 +18,7 @@ function DashboardLayoutContent({
         style={{
           transition: "margin-left 0.2s",
           padding: 24,
-          minHeight: 28000,
+          minHeight: "90vh",
           background: colorBgContainer,
           borderRadius: borderRadiusLG,
         }}

@@ -119,12 +119,14 @@ function LoginForm() {
       </Form>
       {/* register page link */}
       <div className="">
-        <p className="text-sm">
-          Don&apos;t have an account?{" "}
-          <a href="/register" className="text-blue-500">
-            Register
-          </a>
-        </p>
+        {!loading && (
+          <p className="text-sm">
+            Don&apos;t have an account?{" "}
+            <a href="/register" className="text-blue-500">
+              Register
+            </a>
+          </p>
+        )}
       </div>
     </div>
   );

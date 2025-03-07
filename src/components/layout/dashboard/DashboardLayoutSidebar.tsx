@@ -1,14 +1,39 @@
 import { Menu, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { dashboardSidebarMenu } from "@/config/dashboard/config";
+import { MenuProps } from "antd";
+import { usePathname } from "next/navigation";
+
+interface LevelKeysProps {
+  key?: string;
+  children?: LevelKeysProps[];
+}
+
+const getLevelKeys = (menuItems: LevelKeysProps[]) => {
+  const key: Record<string, number> = {};
+  const func = (items2: LevelKeysProps[], level = 1) => {
+    items2.forEach((item) => {
+      if (item.key) {
+        key[item.key] = level;
+      }
+      if (item.children) {
+        func(item.children, level + 1);
+      }
+    });
+  };
+  func(menuItems);
+  return key;
+};
+
+const levelKeys = getLevelKeys(dashboardSidebarMenu as LevelKeysProps[]);
+
 
 function DashboardLayoutSidebar({
   collapsed,
   smallScreenWidth,
   openSidebarInSmallScreen,
-  currentPath,
   handleMenuClick,
 }: {
   collapsed: boolean;
@@ -16,10 +41,39 @@ function DashboardLayoutSidebar({
   openSidebarInSmallScreen: boolean;
   currentPath: string;
   handleMenuClick: (e: { key: string }) => void;
-}) {
+  }) {
+  const pathname = usePathname();
+  const [stateOpenKeys, setStateOpenKeys] = useState([pathname]);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
+    const currentOpenKey = openKeys.find(
+      (key) => stateOpenKeys.indexOf(key) === -1
+    );
+    // open
+    if (currentOpenKey !== undefined) {
+      const repeatIndex = openKeys
+        .filter((key) => key !== currentOpenKey)
+        .findIndex((key) => levelKeys[key] === levelKeys[currentOpenKey]);
+
+      setStateOpenKeys(
+        openKeys
+          // remove repeat key
+          .filter((_, index) => index !== repeatIndex)
+          // remove current level all child
+          .filter((key) => levelKeys[key] <= levelKeys[currentOpenKey])
+        
+      );
+      console.log(openKeys);
+    } else {
+      // close
+      setStateOpenKeys(openKeys);
+      console.log(openKeys);
+    }
+  };
+
   return (
     <Sider
       id="sidebar"
@@ -53,7 +107,9 @@ function DashboardLayoutSidebar({
       <Menu
         theme="light"
         mode="inline"
-        selectedKeys={[currentPath || "/dashboard"]} // Use selectedKeys instead of defaultSelectedKeys
+        defaultSelectedKeys={stateOpenKeys}
+        openKeys={stateOpenKeys}
+        onOpenChange={onOpenChange}
         onClick={handleMenuClick}
         style={{ height: "100%" }}
         items={dashboardSidebarMenu}
