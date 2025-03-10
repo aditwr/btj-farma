@@ -1,8 +1,12 @@
 import DashboardLayout from "@/components/layout/dashboard/DashboardLayout";
-import React from "react";
+import UserProvider from "@/components/providers/UserProvider";
 
 function DashboardLayoutPage({ children }: { children: React.ReactNode }) {
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <UserProvider>
+      <DashboardLayout>{children}</DashboardLayout>
+    </UserProvider>
+  );
 }
 
 export default DashboardLayoutPage;

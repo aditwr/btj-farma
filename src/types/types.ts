@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ServerRequestResponse = {
   success: boolean;
   message: string;
@@ -8,6 +9,6 @@ export type ServerRequestResponse = {
 export type APIRequestResponse = {
   success: boolean;
   message: string;
-  data?: unknown;
-  error?: unknown;
+  data?: any;
+  error?: any;
 };

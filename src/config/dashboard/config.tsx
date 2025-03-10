@@ -6,6 +6,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { logout } from "@/app/(auth)/auth/actions";
+import { clearUser } from "@/store/dashboard/userSlice";
 
 export const dashboardSidebarMenu = [
   {
@@ -62,7 +63,12 @@ export const profileMenu: MenuProps["items"] = [
     label: "Logout",
     icon: <LogoutOutlined />,
     style: { background: "#fb2c36", color: "white" },
-    onClick: () => logout(),
+    onClick: () => {
+      // clear user 
+      clearUser();
+      // logout
+      logout();
+    },
   },
 ];
 
