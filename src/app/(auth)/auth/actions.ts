@@ -68,14 +68,26 @@ export async function signUpWithEmail({
     return { success: false, message: "The input data is invalid" };
   }
 
-  const { error } = await supabase.auth.signUp(result.data);
+  const { data: { user }, error: errorSignUp } = await supabase.auth.signUp(result.data);
+  
+  const { error: errorInsertNewUser } = await supabase.from("users").insert({
+    id: user?.id,
+    email: user?.email,
+    aktif: false,
+    created_at: new Date(),
+    updated_at: new Date(),
+  })
 
-  if (error) {
-    return { success: false, message: error.message };
+  if (errorSignUp) {
+    return { success: false, message: errorSignUp.message };
+  }
+
+  if (errorInsertNewUser) {
+    return { success: false, message: errorInsertNewUser.message };
   }
 
   revalidatePath("/", "layout");
-  redirect("/dashboard?loginSuccess=true");
+  redirect("/dashboard");
 }
 
 export async function logout() {

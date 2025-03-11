@@ -66,11 +66,9 @@ function DashboardLayoutSidebar({
           .filter((key) => levelKeys[key] <= levelKeys[currentOpenKey])
         
       );
-      console.log(openKeys);
     } else {
       // close
       setStateOpenKeys(openKeys);
-      console.log(openKeys);
     }
   };
 

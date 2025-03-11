@@ -35,6 +35,17 @@ export const dashboardSidebarMenu = [
     icon: <SettingOutlined />,
     label: "Setting",
   },
+  {
+    key: "/dashboard/admin",
+    icon: <FileDoneOutlined />,
+    label: "Admin",
+    children: [
+      {
+        key: "/dashboard/admin/verifikasi",
+        label: "Manage Akun",
+      },
+    ],
+  },
 ];
 
 export const profileMenu: MenuProps["items"] = [
@@ -64,11 +75,10 @@ export const profileMenu: MenuProps["items"] = [
     icon: <LogoutOutlined />,
     style: { background: "#fb2c36", color: "white" },
     onClick: () => {
-      // clear user 
+      // clear user
       clearUser();
       // logout
       logout();
     },
   },
 ];
-
