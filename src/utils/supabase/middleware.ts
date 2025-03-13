@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { guestRoutes } from "@/config/config";
+import { unAuthRoutes } from "@/config/config";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -36,38 +36,6 @@ export async function updateSession(request: NextRequest) {
   // issues with users being randomly logged out.
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
-
-  const { pathname } = request.nextUrl;
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    const userId = user.id;
-    const { data: publicUser, error} = await supabase.from("users").select().eq("id", userId).single();
-    if (publicUser) {
-      // if user is not active, redirect to nonactive page
-      if (publicUser.aktif === false && pathname !== "/nonactive") {
-        const url = request.nextUrl.clone();
-        url.pathname = "/nonactive";
-        return NextResponse.redirect(url);
-      }
-    }
-    if(error) console.log('errorFetchPublicUser : ', error);
-  }
-
-  
-
-  if (user && guestRoutes.includes(request.nextUrl.pathname)) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
-  } else if (!user && !guestRoutes.includes(request.nextUrl.pathname)) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:

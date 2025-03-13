@@ -1,18 +1,40 @@
 import {
   DashboardOutlined,
+  DollarOutlined,
   FileDoneOutlined,
   LogoutOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { logout } from "@/app/(auth)/auth/actions";
-import { clearUser } from "@/store/dashboard/userSlice";
+import { clearUser } from "@/store/dashboard/userInfoSlice";
 
 export const dashboardSidebarMenu = [
   {
     key: "/dashboard",
     icon: <DashboardOutlined />,
     label: "Dashboard",
+  },
+  {
+    key: "/dashboard/keuangan",
+    icon: <DollarOutlined />,
+    label: "Keuangan",
+    children: [
+      {
+        key: "/dashboard/keuangan/penjualan",
+        label: "Penjualan",
+      },
+    ],
+  },
+  {
+    key: "/dashboard/administrasi",
+    icon: <DollarOutlined />,
+    label: "Administrasi",
+  },
+  {
+    key: "/dashboard/hr",
+    icon: <DollarOutlined />,
+    label: "HR",
   },
   {
     key: "/dashboard/report",
@@ -31,17 +53,12 @@ export const dashboardSidebarMenu = [
     ],
   },
   {
-    key: "/dashboard/setting",
-    icon: <SettingOutlined />,
-    label: "Setting",
-  },
-  {
-    key: "/dashboard/admin",
+    key: "/dashboard/administrator",
     icon: <FileDoneOutlined />,
-    label: "Admin",
+    label: "Administrator",
     children: [
       {
-        key: "/dashboard/admin/verifikasi",
+        key: "/dashboard/administrator/verifikasi",
         label: "Manage Akun",
       },
     ],

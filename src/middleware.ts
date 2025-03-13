@@ -1,7 +1,12 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
+import { checkAuth } from "./app/(auth)/auth/middleware";
+import { createClient } from "./utils/supabase/server";
 
 export async function middleware(request: NextRequest) {
+  const checkAuthReturn = checkAuth(request);
+  return checkAuthReturn;
+
   return await updateSession(request);
 }
 

@@ -1,4 +1,4 @@
-import { canAccess } from "@/utils/dashboard";
+import { canAccess } from "@/utils/dashboard/server";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";

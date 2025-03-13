@@ -1,11 +1,11 @@
 import DashboardLayout from "@/components/layout/dashboard/DashboardLayout";
-import UserProvider from "@/components/providers/UserProvider";
+import UserInfoProvider from "@/components/providers/UserInfoProvider";
 
 function DashboardLayoutPage({ children }: { children: React.ReactNode }) {
   return (
-    <UserProvider>
+    <UserInfoProvider>
       <DashboardLayout>{children}</DashboardLayout>
-    </UserProvider>
+    </UserInfoProvider>
   );
 }
 

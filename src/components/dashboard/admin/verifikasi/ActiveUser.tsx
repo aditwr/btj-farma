@@ -39,7 +39,7 @@ export default function ActiveUser({
     setLoading(true);
     try {
       const response = await axios.put(
-        `/api/dashboard/admin/verifikasi`,
+        `/api/dashboard/administrator/verifikasi`,
         formData
       );
       console.log("form : ", formData);

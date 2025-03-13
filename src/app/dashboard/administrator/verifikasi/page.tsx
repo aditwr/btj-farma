@@ -12,10 +12,10 @@ type User = {
 
 const getAllUsers = async () => {
   try {
-    const res = await axios.get("/api/dashboard/admin/verifikasi");
+    const res = await axios.get("/api/dashboard/administrator/verifikasi");
     return res.data;
   } catch (error) {
-    console.log("client: /dashboard/admin/verifikasi error: ", error);
+    console.log("client: /dashboard/administrator/verifikasi error: ", error);
   }
 };
 function separateUsers(users: User[]) {

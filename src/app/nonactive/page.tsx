@@ -1,8 +1,10 @@
 "use client";
 import { Button } from "antd";
 import { logout } from "../(auth)/auth/actions";
+import { useRouter } from "next/navigation";
 
 export default function NonActivePage() {
+  const router = useRouter();
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="">
@@ -11,7 +13,7 @@ export default function NonActivePage() {
           Silahkan hubungi admin untuk mengaktifkan akun mu
         </div>
         <div className="space-x-2">
-          <Button type="primary" onClick={() => window.location.reload()}>
+          <Button type="primary" onClick={() => router.push("/")}>
             Refresh
           </Button>
           <Button onClick={() => logout()} type="primary" danger>
