@@ -6,7 +6,7 @@ export async function getCurrentUserPermission(): Promise<string[]> {
   }
 
   interface RolePermission {
-    permissions: PermissionObj;
+    permissions: PermissionObj[];
   }
 
   interface Roles {
@@ -15,7 +15,7 @@ export async function getCurrentUserPermission(): Promise<string[]> {
   }
 
   interface Data {
-    roles: Roles;
+    roles: Roles[];
   }
 
   const supabase = await createClient();
@@ -57,8 +57,10 @@ export async function getCurrentUserPermission(): Promise<string[]> {
 
   function extractPermissions(data: Data): string[] {
     // Mengambil setiap permission dari array role_permissions
-    return data.roles.role_permissions.map(
-      (item) => item.permissions.permission
+    return data.roles.flatMap((role) =>
+      role.role_permissions.flatMap((item) =>
+        item.permissions.map((permissionObj) => permissionObj.permission)
+      )
     );
   }
 
