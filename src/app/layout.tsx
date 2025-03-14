@@ -4,7 +4,7 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
 import ReduxProvider from "@/components/providers/ReduxProvider";
-
+import { ReactQueryProvider } from "@/components/providers/ReactQueryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,19 +20,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <ReduxProvider>
-          <AntdRegistry>
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorPrimary: "#00bd7d",
-                },
-              }}
-            >
-              {children}
-            </ConfigProvider>
-          </AntdRegistry>
-        </ReduxProvider>
+          <ReduxProvider>
+            <AntdRegistry>
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: "#00bd7d",
+                  },
+                }}
+              >
+                <ReactQueryProvider>
+                  {children}
+                </ReactQueryProvider>
+              </ConfigProvider>
+            </AntdRegistry>
+          </ReduxProvider>
       </body>
     </html>
   );

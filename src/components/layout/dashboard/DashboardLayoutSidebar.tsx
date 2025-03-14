@@ -5,9 +5,6 @@ import Image from "next/image";
 import { dashboardSidebarMenu } from "@/config/dashboard/config";
 import { MenuProps } from "antd";
 import { usePathname } from "next/navigation";
-import { canView } from "@/utils/dashboard/client";
-import { useAppSelector } from "@/store/hooks/hooks";
-import store from "@/store/store";
 
 interface LevelKeysProps {
   key?: string;
@@ -45,11 +42,10 @@ function DashboardLayoutSidebar({
   handleMenuClick: (e: { key: string }) => void;
 }) {
   const pathname = usePathname();
-  const [stateOpenKeys, setStateOpenKeys] = useState([pathname]);
+  const [stateOpenKeys, setStateOpenKeys] = useState([pathname.toString()]);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const { user_permissions } = useAppSelector((state) => state.user);
 
   const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
     const currentOpenKey = openKeys.find(

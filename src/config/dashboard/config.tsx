@@ -61,6 +61,10 @@ export const dashboardSidebarMenu = [
         key: "/dashboard/administrator/verifikasi",
         label: "Manage Akun",
       },
+      {
+        key: "/dashboard/administrator/rolepermission/role",
+        label: "Role & Permission",
+      },
     ],
   },
 ];

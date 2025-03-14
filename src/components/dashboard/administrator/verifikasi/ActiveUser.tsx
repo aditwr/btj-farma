@@ -74,7 +74,6 @@ export default function ActiveUser({
           <table className="w-full text-sm text-left">
             <thead className="text-xs bg-emerald-50 text-emerald-700">
               <tr>
-                ``
                 <th scope="col" className="px-6 py-3">
                   No
                 </th>

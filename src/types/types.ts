@@ -7,8 +7,8 @@ export type ServerRequestResponse = {
 };
 
 export type APIRequestResponse = {
-  status?: number;
-  success: boolean;
+  status: number;
+  success?: boolean;
   message: string;
   data?: any;
   error?: any;

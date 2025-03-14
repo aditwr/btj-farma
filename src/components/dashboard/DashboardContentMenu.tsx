@@ -1,13 +1,13 @@
 'use client'
 import React, { useState } from "react";
 import { Menu, MenuProps } from "antd";
-import { menuItems } from "@/config/dashboard/report/sales/config";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 
 
-const DahsboardContentMenu: React.FC = () => {
-  const [current, setCurrent] = useState("mail");
+const DahsboardContentMenu = ({ menuItems }: { menuItems: MenuProps["items"]}) => {
+  const pathname = usePathname();
+  const [current, setCurrent] = useState(pathname.toString());
   const router = useRouter();
 
   const onClick: MenuProps["onClick"] = (e) => {
@@ -18,6 +18,7 @@ const DahsboardContentMenu: React.FC = () => {
   return (
     <Menu
       onClick={onClick}
+      defaultSelectedKeys={['/dashboard/administrator/rolepermission/role']}
       selectedKeys={[current]}
       mode="horizontal"
       items={menuItems}

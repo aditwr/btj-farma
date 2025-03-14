@@ -1,5 +1,5 @@
 "use client";
-import VerificationTable from "@/components/dashboard/admin/verifikasi/VerificationTable";
+import VerificationTable from "@/components/dashboard/administrator/verifikasi/VerificationTable";
 import { LoadingTopLevel } from "@/components/ui/Loading";
 import axios from "axios";
 import { Suspense, useEffect, useState } from "react";
