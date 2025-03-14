@@ -39,7 +39,11 @@ export async function checkAuth(req: NextRequest) {
       .single();
 
     if (errorFetchUser) {
-      return NextResponse.json({ status: 501, error: errorFetchUser });
+      return NextResponse.json({
+        status: 501,
+        error: errorFetchUser,
+        message: "middleware error fetch user with (roles)",
+      });
     }
 
     if (user) {
