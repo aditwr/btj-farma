@@ -1,22 +1,16 @@
 import { createClient } from "../supabase/server";
 
 export async function getCurrentUserPermission(): Promise<string[]> {
-  interface PermissionObj {
-    permission: string;
-  }
-
-  interface RolePermission {
-    permissions: PermissionObj[];
-  }
-
-  interface Roles {
-    role: string;
-    role_permissions: RolePermission[];
-  }
-
-  interface Data {
-    roles: Roles[];
-  }
+  type RolePermissionReturnedData = {
+    roles: {
+      role: any;
+      role_permissions: {
+        permissions: {
+          permission: any;
+        };
+      }[];
+    };
+  } | null;
 
   const supabase = await createClient();
   // get the public.users id
@@ -33,10 +27,11 @@ export async function getCurrentUserPermission(): Promise<string[]> {
   const userId = user?.id;
 
   // access all permission belongs to user with query join
-  const { data, error } = await supabase
-    .from("users")
-    .select(
-      `
+  const { data, error }: { data: RolePermissionReturnedData; error: any } =
+    await supabase
+      .from("users")
+      .select(
+        `
     roles:roles (
       role,
       role_permissions (
@@ -46,22 +41,23 @@ export async function getCurrentUserPermission(): Promise<string[]> {
       )
     )
   `
-    )
-    .eq("id", userId)
-    .single();
+      )
+      .eq("id", userId)
+      .single();
 
   if (error) {
     console.log("/dashboard/admin/verifikasi error: ", error);
     return [];
   }
 
-  function extractPermissions(data: Data): string[] {
+  function extractPermissions(data: RolePermissionReturnedData): string[] {
     // Mengambil setiap permission dari array role_permissions
-    return data.roles.flatMap((role) =>
-      role.role_permissions.flatMap((item) =>
-        item.permissions.map((permissionObj) => permissionObj.permission)
-      )
-    );
+    if (data) {
+      return data.roles.role_permissions.map(
+        (item) => item.permissions.permission
+      );
+    }
+    return [];
   }
 
   const permissionsArray: string[] = extractPermissions(data);

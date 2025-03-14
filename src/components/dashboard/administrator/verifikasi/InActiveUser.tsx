@@ -68,9 +68,9 @@ export default function InActiveUser({
       {loading && <LoadingTopLevel />}
       <div className="">
         <h3 className="text-lg font-semibold mb-2">Inactive Users List</h3>
-        <div className="relative overflow-x-auto">
+        <div className="relative overflow-x-auto overflow-hidden rounded-md">
           <table className="w-full text-sm text-left">
-            <thead className="text-xs bg-emerald-50 text-emerald-700">
+            <thead className="text-xs bg-neutral-50 text-neutral-700">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   No
@@ -96,7 +96,7 @@ export default function InActiveUser({
               {inactiveUsers.map((user, index) => (
                 <tr
                   key={index}
-                  className="bg-white border-b  border-gray-200 hover:bg-gray-50 "
+                  className="bg-white border-b border-gray-200 hover:bg-gray-50 "
                 >
                   <td
                     scope="row"

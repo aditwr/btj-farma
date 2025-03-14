@@ -1,14 +1,16 @@
+import { formatDate } from "@/helpers";
+
 interface Role {
   id: number;
   role: string;
-  created_at: Date;
+  created_at: string;
 }
 
 interface DataType {
   key: string;
   no: string;
   role: string;
-  created_at: Date;
+  created_at: string;
 }
 
 export function convertRolesToDataSource(roles: Role[]): DataType[] {
@@ -16,7 +18,7 @@ export function convertRolesToDataSource(roles: Role[]): DataType[] {
     key: String(index + 1),
     no: String(index + 1),
     role: item.role,
-    created_at: item.created_at,
+    created_at: formatDate(item.created_at),
     action: item,
   }));
 }

@@ -14,21 +14,35 @@ interface DataType {
   key: string;
   no: string;
   role: string;
-  created_at: Date;
+  created_at: string;
 }
 
+type APIRes = {
+  success?: boolean;
+  message?: string;
+  data?: any;
+  countRecord?: number;
+  [key: string]: any;
+};
+
 export default function ManageRole() {
+  const [currentPage, setCurrentPage] = useState(1); // page number
+  const pageSize = 3; // items per page
+
   const queryClient = useQueryClient();
-  const roles = useQuery({
-    queryKey: ["roles"],
-    queryFn: getRoles,
+  const res: APIRes = useQuery({
+    queryKey: ["roles", currentPage, pageSize],
+    queryFn: () => getRoles(currentPage, pageSize),
   });
 
-  if (roles.isLoading) return <LoadingTopLevel />;
-  if (roles.isError) {
+  const roles = res.data;
+  const countRecord = res.countRecord;
+
+  if (res.isLoading) return <LoadingTopLevel />;
+  if (res.isError) {
     console.log(
       "/dashboard/admininistrator/rolepermission/role error: ",
-      roles.error
+      res.error
     );
     return <div>Internal Server Error</div>;
   }
@@ -66,13 +80,12 @@ export default function ManageRole() {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      defaultSortOrder: "descend",
-      sorter: (a: DataType, b: DataType) => a.role.localeCompare(b.role),
     },
     {
       title: "Created at",
       dataIndex: "created_at",
       key: "created_at",
+      sorter: true,
     },
     {
       title: "Action",
@@ -94,8 +107,16 @@ export default function ManageRole() {
           columns={columns}
           onChange={(pagination, filters, sorter) => {
             console.log(sorter);
+            if (pagination.current) {
+              setCurrentPage(pagination.current);
+            }
           }}
           size="small"
+          pagination={{
+            pageSize: pageSize,
+            total: roles?.countRecord,
+            current: currentPage,
+          }}
         />
       </div>
     </div>
