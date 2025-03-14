@@ -67,7 +67,7 @@ export default function ManageRole() {
       dataIndex: "role",
       key: "role",
       defaultSortOrder: "descend",
-      sorter: (a: DataType, b: DataType) => a.role - b.role,
+      sorter: (a: DataType, b: DataType) => a.role.localeCompare(b.role),
     },
     {
       title: "Created at",
