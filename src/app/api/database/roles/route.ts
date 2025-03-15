@@ -19,7 +19,7 @@ export async function GET(
 
   if (errorFetchRoles) {
     console.log(
-      "/dashboard/administrator/verifikasi/api/roles error fetch roles : ",
+      "/api/database/roles | error fetch roles : ",
       errorFetchRoles
     );
     return NextResponse.json({
