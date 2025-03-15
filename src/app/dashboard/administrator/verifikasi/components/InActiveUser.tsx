@@ -1,6 +1,6 @@
 "use client";
 import { Button, Modal, Select, notification, Badge } from "antd";
-import { type User } from "./VerificationTable";
+import { type User } from "@/types/database";
 import { formatTimestamp } from "@/utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -8,13 +8,15 @@ import { NotificationType } from "@/types/types";
 import { openNotificationWithIcon } from "@/utils/antd";
 import { LoadingTopLevel } from "@/components/ui/Loading";
 import { EditOutlined } from "@ant-design/icons";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getUsers } from "../services";
 
-export default function ActiveUser({
-  activeUsers,
+export default function InActiveUser({
+  inactiveUsers,
   roles,
   setRefresh,
 }: {
-  activeUsers: User[];
+  inactiveUsers: User[];
   roles: { id: number; role: string }[] | undefined;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -28,7 +30,21 @@ export default function ActiveUser({
   const [api, contextHolder] = notification.useNotification();
   const [SelectedUserRole, setSelectedUserRole] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  console.log(activeUsers);
+
+  // pagination state
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 1;
+
+  const queryClient = useQueryClient();
+  const query = useQuery({
+    queryKey: ["users", "inactive"],
+    queryFn: () =>
+      getUsers({
+        activeStatus: false,
+        page: currentPage,
+        itemsPerPage: itemsPerPage,
+      }),
+  });
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -43,7 +59,6 @@ export default function ActiveUser({
         formData
       );
       console.log("form : ", formData);
-      console.log(response.data);
       if (response.data?.success) {
         openNotificationWithIcon(
           api,
@@ -69,7 +84,7 @@ export default function ActiveUser({
       {contextHolder}
       {loading && <LoadingTopLevel />}
       <div className="">
-        <h3 className="text-lg font-semibold mb-2">Active Users List</h3>
+        <h3 className="text-lg font-semibold mb-2">Inactive Users List</h3>
         <div className="relative overflow-x-auto overflow-hidden rounded-md">
           <table className="w-full text-sm text-left">
             <thead className="text-xs bg-neutral-50 text-neutral-700">
@@ -95,14 +110,14 @@ export default function ActiveUser({
               </tr>
             </thead>
             <tbody>
-              {activeUsers.map((user, index) => (
+              {inactiveUsers.map((user, index) => (
                 <tr
                   key={index}
-                  className="bg-white border-b  border-gray-200 hover:bg-gray-50 "
+                  className="bg-white border-b border-gray-200 hover:bg-gray-50 "
                 >
                   <td
                     scope="row"
-                    className="px-6 py-3 font-medium whitespace-nowrap"
+                    className="px-6 py-4 font-medium whitespace-nowrap"
                   >
                     {index + 1}
                   </td>

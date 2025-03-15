@@ -2,14 +2,10 @@ import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import InActiveUser from "./InActiveUser";
 import ActiveUser from "./ActiveUser";
+import { Role, User } from "@/types/database";
+import { useQueryClient } from "@tanstack/react-query";
 
-export type User = {
-  email: string;
-  aktif: boolean;
-  [key: string]: any;
-};
-
-export default function VerificationTable({
+export default function AccountVerification({
   activeUsers,
   inactiveUsers,
   roles,
@@ -17,9 +13,10 @@ export default function VerificationTable({
 }: {
   activeUsers: User[];
   inactiveUsers: User[];
-  roles: { id: number; role: string }[] | undefined;
+  roles: Role[] | undefined;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const queryClient = useQueryClient();
   const items: TabsProps["items"] = [
     {
       key: "inactiveUsers",
@@ -46,7 +43,9 @@ export default function VerificationTable({
   ];
 
   const onChange = (key: string) => {
-    //
+    queryClient.invalidateQueries({
+      queryKey: ["users"],
+    });
   };
 
   return (

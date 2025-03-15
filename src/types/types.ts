@@ -14,4 +14,11 @@ export type APIRequestResponse = {
   error?: any;
 };
 
+export interface APIResponse<T = any> {
+  status: string;
+  message: string;
+  code?: number;
+  data?: T;
+}
+
 export type NotificationType = "success" | "info" | "warning" | "error";

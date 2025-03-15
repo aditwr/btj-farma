@@ -1,23 +1,12 @@
 "use client";
-import VerificationTable from "@/components/dashboard/administrator/verifikasi/VerificationTable";
+import AccountVerification from "./components/AccountVerification";
 import { LoadingTopLevel } from "@/components/ui/Loading";
-import axios from "axios";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { getRoles, getUsers } from "./services";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { APIResponse } from "@/types/types";
+import { Role, User } from "@/types/database";
 
-type User = {
-  email: string;
-  aktif: boolean;
-  [key: string]: any;
-};
-
-const getAllUsers = async () => {
-  try {
-    const res = await axios.get("/api/dashboard/administrator/verifikasi");
-    return res.data;
-  } catch (error) {
-    console.log("client: /dashboard/administrator/verifikasi error: ", error);
-  }
-};
 function separateUsers(users: User[]) {
   const activeUsers = users.filter((user) => user.aktif === true);
   const inactiveUsers = users.filter((user) => user.aktif === false);
@@ -25,35 +14,63 @@ function separateUsers(users: User[]) {
   return { activeUsers, inactiveUsers };
 }
 
-export default function NewAccountVerificationPage() {
+export default function AccountVerificationPage() {
   const [nonActiveUsers, setNonActiveUsers] = useState<User[]>([]);
   const [activeUsers, setActiveUsers] = useState<User[]>([]);
   const [roles, setRoles] = useState<{ id: number; role: string }[]>();
   const [refresh, setRefresh] = useState(false);
+
+  const queryClient = useQueryClient();
+  const query = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
+  });
+
+  const queryRoles = useQuery({
+    queryKey: ["roles"],
+    queryFn: getRoles,
+  });
+
+  const APIResponse: APIResponse<{ users: User[] } | null> = query.data;
+
   useEffect(() => {
-    getAllUsers().then((res) => {
-      if (res?.success) {
-        const users = res?.data?.users;
-        const roles = res?.data?.roles;
-        const { activeUsers, inactiveUsers } = separateUsers(users);
-        setNonActiveUsers(inactiveUsers);
+    const APIResponse: APIResponse<{ users: User[] } | null> = query.data;
+    if (query.isSuccess && query.data) {
+      if (APIResponse.status == "success" && APIResponse.data) {
+        const activeUsers = APIResponse.data.users.filter(
+          (user) => user.aktif === true
+        );
+        const nonActiveUsers = APIResponse.data.users.filter(
+          (user) => user.aktif === false
+        );
         setActiveUsers(activeUsers);
-        setRoles(roles);
+        setNonActiveUsers(nonActiveUsers);
       }
-    });
-  }, [refresh]);
+    }
+  }, [query.data, query.isSuccess]);
+
+  useEffect(() => {
+    const APIResponse: APIResponse<{ roles: Role[] } | null> = queryRoles.data;
+    if (queryRoles.isSuccess && queryRoles.data) {
+      if (APIResponse.status == "success" && APIResponse.data) {
+        setRoles(APIResponse.data.roles);
+      }
+    }
+  }, [queryRoles.data, queryRoles.isSuccess]);
+
+  if (query.isLoading) return <LoadingTopLevel />;
+  if (query.isError) return <div>Internal Server Error</div>;
+
   return (
     <div className="">
       <div className="text-base font-semibold">Manage Active Users</div>
       <div className="">
-        <Suspense fallback={<LoadingTopLevel />}>
-          <VerificationTable
-            activeUsers={activeUsers}
-            inactiveUsers={nonActiveUsers}
-            roles={roles}
-            setRefresh={setRefresh}
-          />
-        </Suspense>
+        <AccountVerification
+          activeUsers={activeUsers}
+          inactiveUsers={nonActiveUsers}
+          roles={roles}
+          setRefresh={setRefresh}
+        />
       </div>
     </div>
   );

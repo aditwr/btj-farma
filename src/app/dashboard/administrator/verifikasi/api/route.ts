@@ -1,9 +1,13 @@
+import { APIResponse } from "@/types/types";
 import { canAccess } from "@/utils/dashboard/server";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<APIResponse>> {
+  // check access
   const haveAccess = await canAccess(["all.access"]);
   if (!haveAccess) {
     return redirect("/error/forbidden");
@@ -13,25 +17,24 @@ export async function GET(request: NextRequest) {
     .from("users")
     .select("*")
     .order("created_at", { ascending: false });
-  const { data: roles, error: errorFetchRoles } = await supabase
-    .from("roles")
-    .select("*");
 
-  if (errorFetchUsers || errorFetchRoles) {
+  if (errorFetchUsers) {
     console.log(
-      "/dashboard/admin/verifikasi error: ",
-      errorFetchUsers,
-      errorFetchRoles
+      "/dashboard/administrator/verifikasi/api error fetch users: ",
+      errorFetchUsers
     );
-    return NextResponse.json({ status: 500, message: "Internal Server Error" });
+    return NextResponse.json({
+      status: "error",
+      code: 500,
+      message: "Internal Server Error",
+    });
   }
 
   return NextResponse.json({
-    success: true,
-    messsage: "fetch non active users success",
+    status: "success",
+    message: "Fetch users data success",
     data: {
       users: users,
-      roles: roles,
     },
   });
 }

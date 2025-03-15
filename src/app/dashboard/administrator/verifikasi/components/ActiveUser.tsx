@@ -1,6 +1,6 @@
 "use client";
 import { Button, Modal, Select, notification, Badge } from "antd";
-import { type User } from "./VerificationTable";
+import { type User } from "@/types/database";
 import { formatTimestamp } from "@/utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -9,12 +9,12 @@ import { openNotificationWithIcon } from "@/utils/antd";
 import { LoadingTopLevel } from "@/components/ui/Loading";
 import { EditOutlined } from "@ant-design/icons";
 
-export default function InActiveUser({
-  inactiveUsers,
+export default function ActiveUser({
+  activeUsers,
   roles,
   setRefresh,
 }: {
-  inactiveUsers: User[];
+  activeUsers: User[];
   roles: { id: number; role: string }[] | undefined;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -28,6 +28,7 @@ export default function InActiveUser({
   const [api, contextHolder] = notification.useNotification();
   const [SelectedUserRole, setSelectedUserRole] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  console.log(activeUsers);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -42,6 +43,7 @@ export default function InActiveUser({
         formData
       );
       console.log("form : ", formData);
+      console.log(response.data);
       if (response.data?.success) {
         openNotificationWithIcon(
           api,
@@ -67,7 +69,7 @@ export default function InActiveUser({
       {contextHolder}
       {loading && <LoadingTopLevel />}
       <div className="">
-        <h3 className="text-lg font-semibold mb-2">Inactive Users List</h3>
+        <h3 className="text-lg font-semibold mb-2">Active Users List</h3>
         <div className="relative overflow-x-auto overflow-hidden rounded-md">
           <table className="w-full text-sm text-left">
             <thead className="text-xs bg-neutral-50 text-neutral-700">
@@ -93,14 +95,14 @@ export default function InActiveUser({
               </tr>
             </thead>
             <tbody>
-              {inactiveUsers.map((user, index) => (
+              {activeUsers.map((user, index) => (
                 <tr
                   key={index}
-                  className="bg-white border-b border-gray-200 hover:bg-gray-50 "
+                  className="bg-white border-b  border-gray-200 hover:bg-gray-50 "
                 >
                   <td
                     scope="row"
-                    className="px-6 py-4 font-medium whitespace-nowrap"
+                    className="px-6 py-3 font-medium whitespace-nowrap"
                   >
                     {index + 1}
                   </td>

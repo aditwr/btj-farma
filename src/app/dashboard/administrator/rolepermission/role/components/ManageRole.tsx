@@ -6,7 +6,7 @@ import { Button, Table, Modal, TableColumnsType } from "antd";
 import { convertRolesToDataSource } from "../services/helpers";
 import React, { useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { Role } from "@/types/data";
+import { Role } from "@/types/database";
 
 const { confirm } = Modal;
 
